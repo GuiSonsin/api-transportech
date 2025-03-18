@@ -9,12 +9,25 @@ export class UserService {
 
   constructor(private prisma: PrismaService){}
 
+  private mapToEntity(user: any) : User{
+    return {
+      document: user.document,
+      name: user.name,
+      lastName: user.last,
+      password: user.password,
+      phone: user.phone,
+      email: user.email,
+      isActive: user.isActive
+    }
+  }
+
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(): Promise<User[]> {
+    const user = await this.prisma.user.findMany();
+    return user.map(user => this.mapToEntity(user));
   }
 
   findOne(id: number) {
