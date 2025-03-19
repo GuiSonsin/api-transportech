@@ -13,7 +13,7 @@ export class UserService {
     return {
       document: user.document,
       name: user.name,
-      lastName: user.last,
+      lastName: user.lastName,
       password: user.password,
       phone: user.phone,
       email: user.email,
@@ -21,8 +21,11 @@ export class UserService {
     }
   }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const user = await this.prisma.user.create({
+        data: createUserDto
+      });
+      return this.mapToEntity(user);
   }
 
   async findAll(): Promise<User[]> {
@@ -34,8 +37,12 @@ export class UserService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(document: string, updateUserDto: UpdateUserDto) {
+    const user = await this.prisma.user.update({
+      where: { document },
+      data: updateUserDto
+    });
+    return this.mapToEntity(user);
   }
 
   remove(id: number) {
