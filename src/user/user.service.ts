@@ -45,7 +45,10 @@ export class UserService {
     return this.mapToEntity(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(document: string) { 
+    await this.prisma.user.delete({
+      where: { document },
+    });
+    return { message: `Usuário com o CPF ${document} removido com sucesso.` };
   }
 }
