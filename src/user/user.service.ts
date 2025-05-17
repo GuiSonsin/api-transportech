@@ -33,11 +33,13 @@ export class UserService {
     return user.map(user => this.mapToEntity(user));
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(document: string) {
+    return await this.prisma.user.findUnique({
+      where: { document },
+    });
   }
 
-  async update(document: string, updateUserDto: UpdateUserDto) {
+  async update(document: string, updateUserDto: UpdateUserDto) : Promise<User> {
     const user = await this.prisma.user.update({
       where: { document },
       data: updateUserDto
